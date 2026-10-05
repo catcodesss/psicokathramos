@@ -521,6 +521,293 @@
     }
     .therapy-btn:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(110,155,110,0.5); }
 
+    .therapy-actions { display:flex; flex-wrap:wrap; gap:0.8rem; justify-content:center; }
+    .therapy-btn-alt {
+      background:var(--white); color:var(--sage-dark);
+      border:2px solid var(--sage-light); box-shadow:var(--shadow);
+    }
+
+    /* ─── AGENDA ─── */
+    #agenda {
+      background: linear-gradient(170deg, var(--sage-pale) 0%, var(--lavender-light) 55%, var(--blush-light) 100%);
+      position:relative; overflow:hidden;
+    }
+    #agenda::before, #agenda::after {
+      position:absolute; opacity:0.07; pointer-events:none; user-select:none;
+      animation:floatDeco 9s ease-in-out infinite;
+    }
+    #agenda::before { content:'🌿'; font-size:9rem; top:1.5rem; right:-1rem; }
+    #agenda::after  { content:'🍄'; font-size:6rem; bottom:1rem; left:-0.5rem; animation-delay:3s; }
+
+    .agenda-grid {
+      display:grid; grid-template-columns:0.85fr 1.15fr;
+      gap:2rem; align-items:start; position:relative; z-index:1;
+    }
+    /* Sin esto, la fila de días con scroll ensancha la columna y desborda la página. */
+    .agenda-grid > * { min-width:0; }
+
+    .agenda-intro {
+      background:rgba(255,255,255,0.68);
+      backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+      border:1.5px solid rgba(255,255,255,0.95);
+      border-radius:1.6rem; padding:2rem;
+      box-shadow:var(--shadow);
+      position:sticky; top:84px;
+    }
+    .agenda-pill {
+      display:inline-flex; align-items:center; gap:0.4rem;
+      background:var(--white); color:var(--sage-dark);
+      border:1.5px solid var(--sage-light);
+      padding:0.3rem 0.85rem; border-radius:50px;
+      font-size:0.74rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase;
+    }
+    .agenda-intro h3 {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1.5rem,3vw,1.9rem); line-height:1.2;
+      margin:0.9rem 0 0.7rem; color:var(--text);
+    }
+    .agenda-intro h3 em { color:var(--sage); }
+    .agenda-intro > p { color:var(--text-light); font-size:0.97rem; }
+
+    .agenda-datos {
+      list-style:none; display:grid; grid-template-columns:1fr 1fr;
+      gap:0.65rem; margin:1.3rem 0;
+    }
+    .agenda-datos li {
+      display:flex; gap:0.6rem; align-items:center;
+      background:var(--white); border-radius:1rem;
+      padding:0.65rem 0.75rem; border:1.5px solid var(--border);
+    }
+    .agenda-datos .ico {
+      flex-shrink:0; width:2.3rem; height:2.3rem; border-radius:50%;
+      display:grid; place-items:center; font-size:1.15rem;
+      background:var(--sage-pale);
+    }
+    .agenda-datos li:nth-child(2) .ico { background:var(--lavender-light); }
+    .agenda-datos li:nth-child(3) .ico { background:var(--blush-light); }
+    .agenda-datos li:nth-child(4) .ico { background:var(--mushroom-light); }
+    .agenda-datos strong { display:block; font-size:0.9rem; line-height:1.25; color:var(--text); }
+    .agenda-datos small  { color:var(--text-muted); font-size:0.76rem; line-height:1.3; display:block; }
+
+    .agenda-frase {
+      font-family:'Playfair Display',serif; font-style:italic;
+      font-size:1.08rem; line-height:1.55; color:var(--text);
+      border-left:3px solid var(--blush);
+      padding:0.3rem 0 0.3rem 1rem; margin:0.4rem 0 1.2rem;
+    }
+    .agenda-crisis {
+      font-size:0.8rem; line-height:1.55; color:var(--text-light);
+      background:rgba(249,224,224,0.75); border-radius:0.9rem;
+      padding:0.75rem 0.95rem;
+    }
+
+    .agenda-card {
+      background:var(--white); border-radius:1.6rem;
+      padding:1.8rem; min-height:520px;
+      border:1.5px solid rgba(110,155,110,0.18);
+      box-shadow:0 18px 50px rgba(58,46,36,0.12);
+      scroll-margin-top:80px;
+    }
+
+    .ag-demo {
+      background:var(--mushroom-light); color:#7A5030;
+      border-radius:0.8rem; padding:0.6rem 0.9rem;
+      font-size:0.8rem; margin-bottom:1.1rem; line-height:1.5;
+    }
+
+    /* Pasos */
+    .ag-pasos { list-style:none; display:flex; align-items:center; gap:0.5rem; margin-bottom:1.6rem; }
+    .ag-pasos[hidden] { display:none; }
+    .ag-pasos li {
+      display:flex; align-items:center; gap:0.5rem;
+      font-size:0.8rem; font-weight:700; color:var(--text-muted);
+      transition:color 0.3s;
+    }
+    .ag-pasos li:not(:last-child) { flex:1; }
+    .ag-pasos li:not(:last-child)::after {
+      content:''; flex:1; height:2px; min-width:0.8rem;
+      background:var(--sage-light); border-radius:1px;
+    }
+    .ag-pasos .n {
+      flex-shrink:0; width:1.95rem; height:1.95rem; border-radius:50%;
+      display:grid; place-items:center; font-weight:800;
+      background:var(--cream); border:2px solid var(--sage-light);
+      transition:all 0.3s;
+    }
+    .ag-pasos li.activo { color:var(--text); }
+    .ag-pasos li.activo .n {
+      background:var(--sage); color:var(--white); border-color:var(--sage);
+      box-shadow:0 0 0 5px var(--sage-pale);
+    }
+    .ag-pasos li.hecho .n { background:var(--sage-light); color:var(--sage-dark); border-color:var(--sage-light); }
+
+    .ag-panel { display:none; }
+    .ag-panel.activo { display:block; animation:riseIn 0.4s ease both; }
+    .ag-panel h4 {
+      font-family:'Playfair Display',serif;
+      font-size:1.25rem; color:var(--text); margin-bottom:0.2rem;
+    }
+    .ag-panel h4 small { font-family:'Nunito',sans-serif; font-size:0.78rem; color:var(--text-muted); font-weight:600; }
+    .ag-ayuda { color:var(--text-muted); font-size:0.88rem; margin-bottom:1rem; }
+
+    /* Días */
+    .ag-dias {
+      display:flex; gap:0.55rem; overflow-x:auto;
+      scroll-snap-type:x mandatory; scrollbar-width:thin;
+      padding:0.3rem 0.15rem 0.9rem; margin-bottom:0.9rem;
+    }
+    .ag-dia {
+      flex:0 0 auto; width:4.7rem; scroll-snap-align:start;
+      padding:0.6rem 0.3rem; border-radius:1rem;
+      border:2px solid var(--sage-light); background:var(--white);
+      font-family:inherit; color:var(--text); text-align:center;
+      cursor:pointer; transition:transform 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .ag-dia .ds { display:block; font-size:0.7rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); }
+    .ag-dia .dn { display:block; font-family:'Playfair Display',serif; font-size:1.6rem; line-height:1.15; }
+    .ag-dia .dm { display:block; font-size:0.72rem; color:var(--text-muted); }
+    .ag-dia .dl { display:block; font-size:0.64rem; font-weight:800; color:var(--sage); margin-top:0.2rem; }
+    .ag-dia:hover:not(:disabled) { transform:translateY(-2px); border-color:var(--sage); box-shadow:var(--shadow); }
+    .ag-dia.sel {
+      background:linear-gradient(160deg,var(--sage),var(--sage-dark));
+      border-color:var(--sage-dark); color:var(--white);
+      box-shadow:0 8px 22px rgba(78,122,78,0.35);
+    }
+    .ag-dia.sel .ds, .ag-dia.sel .dm, .ag-dia.sel .dl { color:rgba(255,255,255,0.88); }
+    .ag-dia:disabled { opacity:0.45; cursor:not-allowed; background:var(--cream); border-style:dashed; }
+
+    /* Horas */
+    .ag-horas {
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(112px,1fr));
+      gap:0.55rem; min-height:3rem;
+    }
+    .ag-hora {
+      padding:0.75rem 0.4rem; border-radius:0.9rem;
+      border:2px solid var(--lavender); background:var(--lavender-light);
+      font-family:inherit; font-weight:800; font-size:0.92rem; color:#5E5290;
+      cursor:pointer; transition:all 0.2s;
+    }
+    .ag-hora:hover { transform:translateY(-2px); background:var(--white); }
+    .ag-hora.sel {
+      background:linear-gradient(135deg,var(--sage),var(--sage-dark));
+      border-color:var(--sage-dark); color:var(--white);
+      box-shadow:0 6px 18px rgba(78,122,78,0.3);
+    }
+    .ag-vacio {
+      grid-column:1/-1; text-align:center; color:var(--text-muted);
+      background:var(--cream); border-radius:1rem; padding:1.2rem; font-size:0.9rem;
+    }
+    .ag-skel {
+      flex:0 0 auto; width:4.7rem; height:5.2rem; border-radius:1rem;
+      background:linear-gradient(90deg,var(--sage-pale),var(--white),var(--sage-pale));
+      background-size:200% 100%; animation:brillo 1.2s linear infinite;
+    }
+    @keyframes brillo { from{background-position:200% 0} to{background-position:-200% 0} }
+
+    /* Resumen del horario elegido */
+    .ag-resumen {
+      display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;
+      background:var(--sage-pale); border:1.5px solid var(--sage-light);
+      border-radius:1rem; padding:0.75rem 1rem; margin-bottom:1.3rem;
+      font-size:0.9rem; color:var(--text);
+    }
+    .ag-resumen .ico { font-size:1.4rem; }
+    .ag-link {
+      margin-left:auto; background:none; border:none; cursor:pointer;
+      font-family:inherit; font-weight:800; font-size:0.82rem;
+      color:var(--sage-dark); text-decoration:underline; text-underline-offset:3px;
+    }
+
+    /* Formulario */
+    .ag-campos { display:grid; grid-template-columns:1fr 1fr; gap:0.9rem 1rem; }
+    .ag-campo { display:flex; flex-direction:column; gap:0.3rem; }
+    .ag-campo.full { grid-column:1/-1; }
+    .ag-campo label { font-weight:800; font-size:0.85rem; color:var(--text); }
+    .ag-campo label small { font-weight:600; color:var(--text-muted); }
+    .ag-campo input, .ag-campo textarea {
+      font-family:inherit; font-size:0.95rem; color:var(--text);
+      padding:0.75rem 0.95rem; border-radius:0.85rem;
+      border:2px solid var(--sage-pale); background:var(--cream);
+      transition:border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .ag-campo textarea { resize:vertical; min-height:92px; line-height:1.55; }
+    .ag-campo input:focus, .ag-campo textarea:focus {
+      outline:none; border-color:var(--sage); background:var(--white);
+      box-shadow:0 0 0 4px var(--sage-pale);
+    }
+    .ag-campo.error input { border-color:#D98080; background:#FFF6F6; }
+    .ag-err { font-size:0.76rem; color:#B04848; min-height:1em; }
+    .ag-oculto { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+
+    .ag-check {
+      display:flex; gap:0.6rem; align-items:flex-start;
+      font-size:0.84rem; line-height:1.5; color:var(--text-light); cursor:pointer;
+    }
+    .ag-check input { accent-color:var(--sage); width:1.1rem; height:1.1rem; margin-top:0.18rem; flex-shrink:0; }
+
+    /* Filas de datos de la confirmación */
+    .ag-dato {
+      display:flex; justify-content:space-between; align-items:center; gap:0.6rem;
+      padding:0.4rem 0; font-size:0.9rem;
+      border-bottom:1px solid rgba(110,155,110,0.25);
+    }
+    .ag-dato:last-of-type { border-bottom:none; }
+    .ag-dato .k { color:var(--text-muted); }
+    .ag-dato .v { font-weight:800; color:var(--text); word-break:break-all; text-align:right; }
+    .ag-checks { display:flex; flex-direction:column; gap:0.6rem; margin-top:1rem; }
+
+    /* Botones */
+    .ag-nav { display:flex; justify-content:space-between; align-items:center; gap:0.8rem; flex-wrap:wrap; margin-top:1.5rem; }
+    .ag-nav .ag-btn:only-child { margin-left:auto; }
+    .ag-btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:0.5rem;
+      padding:0.85rem 1.8rem; border-radius:50px; border:none; cursor:pointer;
+      background:linear-gradient(135deg,var(--sage),var(--sage-dark));
+      color:var(--white); font-family:inherit; font-weight:800; font-size:0.97rem;
+      box-shadow:0 5px 20px rgba(110,155,110,0.38);
+      transition:transform 0.25s, box-shadow 0.25s, opacity 0.25s;
+      text-decoration:none;
+    }
+    .ag-btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 10px 28px rgba(110,155,110,0.5); }
+    .ag-btn:disabled { opacity:0.45; cursor:not-allowed; box-shadow:none; }
+    .ag-btn-sec {
+      background:none; border:none; cursor:pointer;
+      font-family:inherit; font-weight:800; font-size:0.9rem; color:var(--text-muted);
+      padding:0.6rem 0.4rem;
+    }
+    .ag-btn-sec:hover { color:var(--sage-dark); }
+    .ag-spin {
+      width:1rem; height:1rem; border-radius:50%;
+      border:2.5px solid rgba(255,255,255,0.45); border-top-color:var(--white);
+      animation:giro 0.8s linear infinite;
+    }
+    @keyframes giro { to { transform:rotate(360deg); } }
+
+    .ag-aviso {
+      background:var(--blush-light); color:#8A3D3D; border-radius:0.9rem;
+      padding:0.75rem 1rem; font-size:0.86rem; margin-top:1rem;
+    }
+
+    /* Confirmación */
+    .ag-exito { text-align:center; padding:0.5rem 0.3rem; }
+    .ag-exito-ico {
+      width:92px; height:92px; margin:0.5rem auto 1rem; border-radius:50%;
+      display:grid; place-items:center; font-size:2.7rem;
+      background:radial-gradient(circle,var(--white) 30%,var(--sage-pale) 100%);
+      border:3px solid var(--sage-light);
+      animation:latido 2.4s ease-in-out infinite;
+    }
+    @keyframes latido { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+    .ag-exito h4 { font-family:'Playfair Display',serif; font-size:1.6rem; margin-bottom:0.5rem; }
+    .ag-exito > p { color:var(--text-light); max-width:440px; margin:0 auto 1rem; font-size:0.95rem; }
+    .ag-exito-datos {
+      text-align:left; background:var(--sage-pale); border-radius:1.1rem;
+      padding:1rem 1.2rem; margin:1.2rem auto; max-width:420px;
+    }
+    .ag-exito-datos .ag-dato { border-bottom-color:rgba(110,155,110,0.25); }
+    .ag-exito-datos .v { text-transform:none; }
+    .ag-exito .ag-nav { justify-content:center; }
+
     /* ─── FOOTER ─── */
     footer {
       background:var(--text); color:rgba(255,255,255,0.6);
@@ -535,6 +822,10 @@
     .ft-heart { color:var(--blush); }
 
     /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .agenda-grid { grid-template-columns:1fr; }
+      .agenda-intro { position:static; }
+    }
     @media (max-width: 820px) {
       .sobre-grid { grid-template-columns:1fr; gap:2rem; text-align:center; }
       .profile-wrap { align-items:center; }
@@ -570,6 +861,14 @@
       .avatar-badge { width:66px; height:66px; }
       .subsec-header { flex-direction:column; text-align:center; }
     }
+    @media (max-width: 560px) {
+      .agenda-intro, .agenda-card { padding:1.3rem 1.1rem; border-radius:1.3rem; }
+      .agenda-datos { grid-template-columns:1fr; }
+      .ag-campos { grid-template-columns:1fr; }
+      .ag-pasos li:not(.activo) .t { display:none; }
+      .ag-nav { flex-direction:column-reverse; align-items:stretch; }
+      .ag-nav .ag-btn { width:100%; }
+    }
   </style>
 </head>
 <body>
@@ -591,6 +890,7 @@
   <ul class="nav-links" id="navLinks">
     <li><a href="#sobre-mi"    onclick="closeNav()">Sobre mí</a></li>
     <li><a href="#experiencia" onclick="closeNav()">Experiencia</a></li>
+    <li><a href="#agenda"      onclick="closeNav()">📅 Agendar cita</a></li>
     <li><a href="#contacto"    onclick="closeNav()" class="nav-cta">💬 Contacto</a></li>
   </ul>
 </nav>
@@ -763,6 +1063,132 @@
     </div>
   </section>
 
+  <!-- ─── AGENDA ─── -->
+  <section id="agenda">
+    <div class="sec-inner">
+      <p class="sec-label reveal">Un espacio para ti</p>
+      <h2 class="sec-title reveal">Agenda tu cita</h2>
+      <div class="sec-rule reveal"></div>
+
+      <div class="agenda-grid">
+        <aside class="agenda-intro reveal">
+          <span class="agenda-pill">🌿 Orientación y consejería psicológica virtual</span>
+          <h3>Te escucho, <em>a tu ritmo</em></h3>
+          <p>
+            A veces solo necesitamos un lugar donde poner en palabras lo que sentimos.
+            Este es un espacio seguro, cálido y sin juicios para acompañarte en lo que
+            estés atravesando: estrés, ansiedad, duelos, relaciones, decisiones
+            o simplemente ganas de entenderte mejor.
+          </p>
+          <ul class="agenda-datos">
+            <li><span class="ico">🕰️</span><div><strong>50 minutos</strong><small>por sesión</small></div></li>
+            <li><span class="ico">💻</span><div><strong>Virtual</strong><small>por Google Meet</small></div></li>
+            <li><span class="ico">🔒</span><div><strong>Confidencial</strong><small>lo que compartes se cuida</small></div></li>
+            <li><span class="ico">🌱</span><div><strong>Sin juicios</strong><small>vamos a tu ritmo</small></div></li>
+          </ul>
+          <blockquote class="agenda-frase">
+            “No necesitas tenerlo todo resuelto para pedir ayuda. Basta con querer
+            sentirte un poco mejor.”
+          </blockquote>
+          <p class="agenda-crisis">
+            💗 Este espacio no es un servicio de emergencias. Si atraviesas una crisis o
+            sientes que tu vida está en riesgo, llama gratis a la <strong>Línea 113, opción 5</strong>
+            (salud mental, MINSA) o acude a la emergencia más cercana.
+          </p>
+        </aside>
+
+        <div class="agenda-card reveal" id="agendaCard">
+          <div class="ag-demo" id="agDemo" hidden>
+            🧪 <strong>Modo demostración:</strong> la agenda aún no está conectada a Google Calendar,
+            así que las reservas no se guardan ni se envían correos.
+          </div>
+
+          <ol class="ag-pasos" id="agPasos">
+            <li class="activo"><span class="n">1</span><span class="t">Horario</span></li>
+            <li><span class="n">2</span><span class="t">Tus datos</span></li>
+          </ol>
+
+          <form id="agForm" novalidate>
+            <!-- Paso 1 -->
+            <div class="ag-panel activo" data-paso="1">
+              <h4>¿Qué día te viene mejor?</h4>
+              <p class="ag-ayuda">Elige con calma; los días en gris ya no tienen espacios libres.</p>
+              <div class="ag-dias" id="agDias" aria-label="Días disponibles"></div>
+              <h4>Elige tu horario <small>· hora de Perú</small></h4>
+              <p class="ag-ayuda" id="agDiaTexto">&nbsp;</p>
+              <div class="ag-horas" id="agHoras"></div>
+              <div class="ag-nav">
+                <button type="button" class="ag-btn" id="agSig1" disabled>Continuar →</button>
+              </div>
+            </div>
+
+            <!-- Paso 2 -->
+            <div class="ag-panel" data-paso="2">
+              <div class="ag-resumen">
+                <span class="ico">📅</span>
+                <span><strong class="agResumenTexto"></strong></span>
+                <button type="button" class="ag-link" data-ir="1">Cambiar</button>
+              </div>
+              <h4>Cuéntame un poquito de ti</h4>
+              <p class="ag-ayuda">Solo lo necesario para enviarte la confirmación y el enlace de la sesión.</p>
+              <div class="ag-campos">
+                <div class="ag-campo full">
+                  <label for="agNombre">¿Cómo te llamas?</label>
+                  <input id="agNombre" name="nombre" autocomplete="name" maxlength="80" placeholder="Tu nombre y apellido">
+                  <span class="ag-err"></span>
+                </div>
+                <div class="ag-campo">
+                  <label for="agCorreo">Correo electrónico</label>
+                  <input id="agCorreo" name="correo" type="email" autocomplete="email" maxlength="120" placeholder="tucorreo@ejemplo.com">
+                  <span class="ag-err"></span>
+                </div>
+                <div class="ag-campo">
+                  <label for="agTelefono">WhatsApp / celular</label>
+                  <input id="agTelefono" name="telefono" type="tel" autocomplete="tel" maxlength="20" placeholder="999 999 999">
+                  <span class="ag-err"></span>
+                </div>
+                <div class="ag-campo full">
+                  <label for="agMotivo">¿Qué te gustaría trabajar? <small>(opcional)</small></label>
+                  <textarea id="agMotivo" name="motivo" maxlength="600"
+                    placeholder="Puedes escribir unas líneas, o dejarlo en blanco y lo conversamos en la sesión."></textarea>
+                </div>
+                <label class="ag-check full" style="grid-column:1/-1">
+                  <input type="checkbox" id="agPrimera" checked>
+                  Es mi primera sesión contigo
+                </label>
+                <div class="ag-oculto" aria-hidden="true">
+                  <label>Sitio web <input name="sitio" id="agSitio" tabindex="-1" autocomplete="off"></label>
+                </div>
+              </div>
+              <div class="ag-checks">
+                <label class="ag-check">
+                  <input type="checkbox" id="agMayor">
+                  <span>Tengo 18 años o más. <span style="color:var(--text-muted)">(Si eres menor de edad, escríbeme por WhatsApp y coordinamos junto a tu mamá, papá o apoderado.)</span></span>
+                </label>
+                <label class="ag-check">
+                  <input type="checkbox" id="agConsent">
+                  Entiendo que este es un servicio de orientación y consejería psicológica brindado por
+                  una estudiante de Psicología, que es confidencial y que no reemplaza la atención de emergencia.
+                  Acepto que mis datos se usen solo para gestionar mi cita.
+                </label>
+              </div>
+
+              <div class="ag-aviso" id="agAviso" hidden></div>
+
+              <div class="ag-nav">
+                <button type="button" class="ag-btn-sec" data-ir="1">← Volver</button>
+                <button type="submit" class="ag-btn" id="agReservar" disabled>🌿 Reservar mi espacio</button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Confirmación -->
+          <div class="ag-panel" data-paso="3" id="agExito"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ─── CONTACTO ─── -->
   <section id="contacto">
     <div class="sec-inner">
@@ -778,10 +1204,13 @@
           Ofrezco sesiones individuales con perspectiva de género y enfoque en
           derechos humanos, en un espacio cálido, confidencial y libre de juicios.
         </p>
-        <a href="https://wa.me/51952351862?text=Hola%20Katherine%2C%20me%20interesa%20informaci%C3%B3n%20sobre%20orientaci%C3%B3n%20y%20consejer%C3%ADa%20%F0%9F%8C%BF"
-           target="_blank" rel="noopener" class="therapy-btn">
-          💬 Solicitar una sesión
-        </a>
+        <div class="therapy-actions">
+          <a href="#agenda" class="therapy-btn">📅 Agendar en línea</a>
+          <a href="https://wa.me/51952351862?text=Hola%20Katherine%2C%20me%20interesa%20informaci%C3%B3n%20sobre%20orientaci%C3%B3n%20y%20consejer%C3%ADa%20%F0%9F%8C%BF"
+             target="_blank" rel="noopener" class="therapy-btn therapy-btn-alt">
+            💬 Escribirme por WhatsApp
+          </a>
+        </div>
       </div>
 
       <div class="contact-cards reveal">
@@ -920,7 +1349,247 @@ window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
 });
 
+/* ── Agenda ──
+   AGENDA_URL es la URL de la aplicación web de Google Apps Script
+   (ver agenda-google/INSTRUCCIONES.md). Mientras esté vacía, la agenda
+   funciona en modo demostración: se ve completa pero no reserva nada. */
+const AGENDA_URL = 'https://script.google.com/macros/s/AKfycbyCagreiYRaAfJmWmAh_F-nARnUu4L5kGARLz0TFR_gTah5H4VTh3jOV1lepLjE99DO/exec';
+
+const ZONA = 'America/Lima';
+const fmt = (opts) => new Intl.DateTimeFormat('es-PE', { timeZone: ZONA, ...opts });
+const fmtFechaISO  = new Intl.DateTimeFormat('en-CA', { timeZone: ZONA });
+const fmtSemana    = fmt({ weekday: 'short' });
+const fmtDiaNum    = fmt({ day: 'numeric' });
+const fmtMes       = fmt({ month: 'short' });
+const fmtLarga     = fmt({ weekday: 'long', day: 'numeric', month: 'long' });
+const fmtHora      = fmt({ hour: 'numeric', minute: '2-digit', hour12: true });
+
+const ag = { info: null, dia: null, hora: null, paso: 1 };
+const $ = (id) => document.getElementById(id);
+
+function el(tag, attrs = {}, ...hijos) {
+  const n = document.createElement(tag);
+  Object.entries(attrs).forEach(([k, v]) => {
+    if (k === 'class') n.className = v;
+    else if (k.startsWith('on')) n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k, v);
+  });
+  hijos.flat().forEach(h => n.append(h));
+  return n;
+}
+
+// Perú no tiene horario de verano: UTC−5 todo el año.
+const fechaLima = (iso) => new Date(iso + 'T12:00:00-05:00');
+const mayuscula = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const textoCita = () => mayuscula(`${fmtLarga.format(new Date(ag.hora))} · ${fmtHora.format(new Date(ag.hora))}`);
+
+/* Datos de ejemplo para el modo demostración (mismo horario que Code.gs). */
+function datosDemo() {
+  const horario = { 1:['16:00','17:00','18:00','19:00'], 2:['16:00','17:00','18:00','19:00'],
+                    3:['16:00','17:00','18:00','19:00'], 4:['16:00','17:00','18:00','19:00'],
+                    5:['16:00','17:00','18:00'], 6:['09:00','10:00','11:00','12:00'] };
+  const limite = Date.now() + 12 * 36e5;
+  const hoy = fmtFechaISO.format(new Date());
+  const dias = [];
+  for (let i = 0; i < 21; i++) {
+    const fecha = fmtFechaISO.format(new Date(fechaLima(hoy).getTime() + i * 864e5));
+    const horas = (horario[fechaLima(fecha).getUTCDay()] || [])
+      .map(h => new Date(`${fecha}T${h}:00-05:00`))
+      // Algunos huecos "ocupados" para que la demo se parezca a una agenda real.
+      .filter((d, j) => d.getTime() >= limite && (i + j) % 4 !== 1)
+      .map(d => ({ inicio: d.toISOString() }));
+    dias.push({ fecha, horas });
+  }
+  return {
+    ok: true, duracionMin: 50, dias,
+  };
+}
+
+async function cargarAgenda() {
+  $('agDemo').hidden = !!AGENDA_URL;
+  $('agDias').replaceChildren(...Array.from({ length: 7 }, () => el('div', { class: 'ag-skel' })));
+  $('agHoras').replaceChildren();
+  try {
+    const datos = AGENDA_URL ? await fetch(AGENDA_URL).then(r => r.json()) : datosDemo();
+    if (!datos.ok) throw new Error('agenda');
+    ag.info = datos;
+    pintarDias();
+  } catch (_) {
+    $('agDias').replaceChildren(el('div', { class: 'ag-vacio', style: 'flex:1' },
+      'No pude cargar la agenda en este momento 🌧️. Inténtalo de nuevo en unos minutos o ',
+      el('a', { href: 'https://wa.me/51952351862', target: '_blank', rel: 'noopener' }, 'escríbeme por WhatsApp'),
+      ' y buscamos un horario juntas/os.'));
+  }
+}
+
+function pintarDias() {
+  const dias = ag.info.dias;
+  const cont = $('agDias');
+  cont.replaceChildren(...dias.map(d => {
+    const f = fechaLima(d.fecha);
+    const libres = d.horas.length;
+    return el('button', {
+      type: 'button', class: 'ag-dia' + (ag.dia === d.fecha ? ' sel' : ''),
+      'data-fecha': d.fecha, ...(libres ? {} : { disabled: '' }),
+      'aria-label': fmtLarga.format(f) + (libres ? `, ${libres} horarios` : ', sin horarios'),
+      onclick: () => elegirDia(d.fecha),
+    },
+      el('span', { class: 'ds' }, fmtSemana.format(f).replace('.', '')),
+      el('span', { class: 'dn' }, fmtDiaNum.format(f)),
+      el('span', { class: 'dm' }, fmtMes.format(f).replace('.', '')),
+      el('span', { class: 'dl' }, libres ? `${libres} libre${libres > 1 ? 's' : ''}` : '—'));
+  }));
+  const actual = dias.find(d => d.fecha === ag.dia && d.horas.length) || dias.find(d => d.horas.length);
+  if (actual) elegirDia(actual.fecha);
+  else $('agHoras').replaceChildren(el('div', { class: 'ag-vacio' },
+    'Por ahora todos los espacios están ocupados 🌱. Escríbeme por WhatsApp y te aviso apenas se libere uno.'));
+}
+
+function elegirDia(fecha) {
+  ag.dia = fecha;
+  document.querySelectorAll('.ag-dia').forEach(b => b.classList.toggle('sel', b.dataset.fecha === fecha));
+  const dia = ag.info.dias.find(d => d.fecha === fecha);
+  if (!dia.horas.some(h => h.inicio === ag.hora)) ag.hora = null;
+  $('agDiaTexto').textContent = mayuscula(fmtLarga.format(fechaLima(fecha)));
+  $('agHoras').replaceChildren(...dia.horas.map(h => el('button', {
+    type: 'button', class: 'ag-hora' + (h.inicio === ag.hora ? ' sel' : ''), 'data-inicio': h.inicio,
+    onclick: () => {
+      ag.hora = h.inicio;
+      document.querySelectorAll('.ag-hora').forEach(b => b.classList.toggle('sel', b.dataset.inicio === h.inicio));
+      $('agSig1').disabled = false;
+    },
+  }, fmtHora.format(new Date(h.inicio)))));
+  $('agSig1').disabled = !ag.hora;
+}
+
+function actualizarReservar() {
+  $('agReservar').disabled = !($('agMayor').checked && $('agConsent').checked);
+}
+
+function irAPaso(n) {
+  ag.paso = n;
+  document.querySelectorAll('#agendaCard .ag-panel').forEach(p =>
+    p.classList.toggle('activo', +p.dataset.paso === n));
+  document.querySelectorAll('#agPasos li').forEach((li, i) => {
+    li.classList.toggle('activo', i + 1 === n);
+    li.classList.toggle('hecho', i + 1 < n);
+  });
+  $('agPasos').hidden = n === 3;
+  if (ag.hora) document.querySelectorAll('.agResumenTexto').forEach(s => (s.textContent = textoCita()));
+  const card = $('agendaCard');
+  if (card.getBoundingClientRect().top < 60) card.scrollIntoView({ behavior: 'smooth' });
+}
+
+const VALIDACIONES = {
+  agNombre:   [v => v.trim().length >= 2, '¿Cómo te gustaría que te llame? 🌿'],
+  agCorreo:   [v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()), 'Revisa tu correo: ahí te llegará la confirmación.'],
+  agTelefono: [v => /^[+\d\s()-]{6,20}$/.test(v.trim()), 'Déjame un número para poder contactarte si hace falta.'],
+};
+
+function validarCampo(id) {
+  const input = $(id);
+  const [ok, msj] = VALIDACIONES[id];
+  const valido = ok(input.value);
+  input.parentElement.classList.toggle('error', !valido);
+  input.parentElement.querySelector('.ag-err').textContent = valido ? '' : msj;
+  return valido;
+}
+
+async function reservar(e) {
+  e.preventDefault();
+  if ($('agReservar').disabled) return;
+  const camposOk = Object.keys(VALIDACIONES).map(validarCampo).every(Boolean);
+  if (!camposOk) return document.querySelector('.ag-campo.error input').focus();
+  const boton = $('agReservar');
+  const aviso = $('agAviso');
+  aviso.hidden = true;
+  boton.disabled = true;
+  boton.replaceChildren(el('span', { class: 'ag-spin' }), 'Reservando tu espacio…');
+
+  const datos = {
+    inicio: ag.hora,
+    nombre: $('agNombre').value.trim(),
+    correo: $('agCorreo').value.trim(),
+    telefono: $('agTelefono').value.trim(),
+    motivo: $('agMotivo').value.trim(),
+    primeraVez: $('agPrimera').checked,
+    mayorDeEdad: $('agMayor').checked,
+    consentimiento: $('agConsent').checked,
+    sitio: $('agSitio').value,
+  };
+
+  try {
+    let r;
+    if (AGENDA_URL) {
+      // text/plain evita la consulta previa CORS, que Apps Script no responde.
+      r = await fetch(AGENDA_URL, { method: 'POST', body: JSON.stringify(datos) }).then(x => x.json());
+    } else {
+      await new Promise(res => setTimeout(res, 900));
+      r = { ok: true, inicio: datos.inicio, meet: '' };
+    }
+    if (r.ok) return mostrarExito(datos, r);
+    if (r.error === 'no_disponible') {
+      aviso.textContent = 'Alguien acaba de reservar ese horario 💛. Te muestro los espacios actualizados para que elijas otro.';
+      aviso.hidden = false;
+      ag.hora = null;
+      await cargarAgenda();
+      setTimeout(() => irAPaso(1), 1800);
+    } else {
+      aviso.textContent = 'Algo no salió bien al guardar tu cita. Revisa tus datos o inténtalo en unos minutos; también puedes escribirme por WhatsApp.';
+      aviso.hidden = false;
+    }
+  } catch (_) {
+    aviso.textContent = 'No pude conectarme con la agenda. Revisa tu conexión e inténtalo nuevamente 🌱.';
+    aviso.hidden = false;
+  } finally {
+    boton.replaceChildren('🌿 Reservar mi espacio');
+    actualizarReservar();
+  }
+}
+
+function mostrarExito(datos, r) {
+  const inicio = new Date(r.inicio);
+  const nombre = datos.nombre.split(/\s+/)[0];
+  const fila = (k, v) => el('div', { class: 'ag-dato' }, el('span', { class: 'k' }, k), el('span', { class: 'v' }, v));
+
+  $('agExito').replaceChildren(el('div', { class: 'ag-exito' },
+    el('div', { class: 'ag-exito-ico' }, '🌿'),
+    el('h4', {}, `¡Gracias, ${nombre}! Tu espacio está reservado`),
+    el('p', {}, 'Dar este paso ya dice mucho de cuánto te importas. Me alegra que vayamos a encontrarnos.'),
+    el('div', { class: 'ag-exito-datos' },
+      fila('Fecha', mayuscula(fmtLarga.format(inicio))),
+      fila('Hora', fmtHora.format(inicio) + ' (Perú)'),
+      fila('Modalidad', 'Virtual · Google Meet'),
+      r.meet ? el('div', { class: 'ag-dato' }, el('span', { class: 'k' }, 'Enlace'),
+        el('a', { class: 'v', href: r.meet, target: '_blank', rel: 'noopener' }, 'Abrir Meet')) : ''),
+    el('p', {}, AGENDA_URL
+      ? `Te envié un correo a ${datos.correo} con todos los detalles y una invitación de Google Calendar. Si no lo ves en unos minutos, revisa Spam o Promociones.`
+      : '🧪 Modo demostración: esta reserva no se guardó ni se envió ningún correo.'),
+    el('div', { class: 'ag-nav' },
+      el('button', { type: 'button', class: 'ag-btn-sec', onclick: reiniciarAgenda }, 'Agendar otra cita'))));
+  irAPaso(3);
+}
+
+function reiniciarAgenda() {
+  $('agForm').reset();
+  ag.hora = null;
+  document.querySelectorAll('.ag-campo.error').forEach(c => c.classList.remove('error'));
+  document.querySelectorAll('.ag-err').forEach(c => (c.textContent = ''));
+  actualizarReservar();
+  irAPaso(1);
+  cargarAgenda();
+}
+
+$('agSig1').addEventListener('click', () => ag.hora && irAPaso(2));
+Object.keys(VALIDACIONES).forEach(id =>
+  $(id).addEventListener('blur', () => $(id).value && validarCampo(id)));
+document.querySelectorAll('[data-ir]').forEach(b => b.addEventListener('click', () => irAPaso(+b.dataset.ir)));
+$('agMayor').addEventListener('change', actualizarReservar);
+$('agConsent').addEventListener('change', actualizarReservar);
+$('agForm').addEventListener('submit', reservar);
+
 buildGrids();
+cargarAgenda();
 </script>
 </body>
 </html>
